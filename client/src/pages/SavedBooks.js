@@ -1,19 +1,22 @@
 import React from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
-import { GET_ME, deleteBook } from '../utils/API';
+import { GET_ME } from '../utils/queries';
+import { REMOVE_BOOK } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
+import { useQuery, useMutation } from '@apollo/client';
 
 const SavedBooks = () => {
   const {loading, data} = useQuery(GET_ME);
-  const userData = data?.me || [];
+  const userData = data?.me || {};
+  const [removeBook] = useMutation(REMOVE_BOOK);
 
 
 
 
   const handleDeleteBook = async (bookId) => {
-    const [removeBook] = useMutation(REMOVE_BOOK);
+   
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -21,7 +24,10 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await deleteBook(bookId, token);
+      const response = await removeBook({
+        variables: { bookId: bookId,
+        }
+      });
 
       if (!response.ok) {
         throw new Error('something went wrong!');
