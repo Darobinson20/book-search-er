@@ -1,33 +1,30 @@
-import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
- } from '@apollo/client';
-import {setContext} from '@apollo/client/link/context';
-import SearchBooks from './pages/SearchBooks';
-import SavedBooks from './pages/SavedBooks';
-import Navbar from './components/Navbar';
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import SearchBooks from "./pages/SearchBooks";
+import SavedBooks from "./pages/SavedBooks";
+import Navbar from "./components/Navbar";
 
-
-import Switch from 'react-bootstrap/esm/Switch';
-
+import Switch from "react-bootstrap/esm/Switch";
 
 const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('id_token');
-  return{
+  const token = localStorage.getItem("id_token");
+  return {
     headers: {
       ...headers,
       authorization: token ? `Bearer ${token}` : '',
-
-    }
-  }
+    },
+  };
 });
 
 const client = new ApolloClient({
@@ -38,27 +35,16 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-    <Router>
-      <>
-        <Navbar />
-        <Switch>
-        
-          <Route 
-            exact path='/' 
-            component={<SearchBooks />} 
-          />
-          <Route 
-            exact path='/saved' 
-            component={<SavedBooks />} 
-          />
-          <Route 
-          render={() => <h1 className='display-2'>Wrong page!</h1>}
-         
-          />
+      <Router>
+        <>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={ SearchBooks } />
+            <Route exact path="/saved" component={SavedBooks } />
+            <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
           </Switch>
-        
-      </>
-    </Router>
+        </>
+      </Router>
     </ApolloProvider>
   );
 }
