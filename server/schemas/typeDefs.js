@@ -28,9 +28,9 @@ input BookInput {
     link: String
 }
 
-Type Auth {
+type Auth {
     token: ID!
-    user: USer
+    user: User
 }
 
 type Query {
@@ -39,7 +39,7 @@ type Query {
 }
 
 type Mutation{ 
-    login(email: String!. password: String!): Auth
+    login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     saveBook(input: BookInput): User
     removeBook(bookId: String!): User
